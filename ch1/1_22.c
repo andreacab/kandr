@@ -1,37 +1,52 @@
 #include <stdio.h>
 
-#define MAXLINE 1000
+#define MAXLINE 10
+#define MAX 1000
 #define BLANK ' '
-#define TAB '\t'
 #define EOS '\0'
-#define SPACE2TAB 6
 
-void fold();
+void fold(char[]);
+void getLine(char[], int);
 
 int main(int argc, char* argv[]) {
-  entab();
+  char buffer[MAX];
 
+  getLine(buffer, MAX);
+  printf("getLine:%s\n", buffer);
+  fold(buffer);
+  printf("fold:\n%s\n", buffer);
   return 0;
 }
 
-void fold() {
-  int c, i, numberOfBlanks;
+void getLine(char buffer[], int max) {
+  int c, i;
 
-  numberOfBlanks = 0;
-  while ((c = getchar()) != EOF) {
-    if (c == BLANK) {
-      ++numberOfBlanks;
+  i = 0;
+  while ((c = getchar()) != EOF && c != '\n' && i < max) {
+    buffer[i] = c;
+    ++i;
+  }
+
+  buffer[i] = EOS;
+}
+
+void fold(char buffer[]) {
+  int c, i, j, previous;
+
+  i = 1;
+  j = -1;
+  previous = buffer[0];
+  while ((c = buffer[i]) != EOS) {
+    if ((i % (MAXLINE - 1)) == 0) {
+      if (j >= 0)
+        buffer[j] = '\n';
     } else {
-      for (i = 0; i < numberOfBlanks; i++)
-        putchar(BLANK);
-      putchar(c);
-      numberOfBlanks = 0;
+      if (c == BLANK && previous != BLANK) {
+        j = i;
+      }
     }
-
-    if (numberOfBlanks == SPACE2TAB) {
-      putchar(TAB);
-      numberOfBlanks = 0;
-    }
+    previous = c;
+    i++;
   }
 }
 
