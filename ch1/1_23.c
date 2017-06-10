@@ -6,7 +6,7 @@
 void removeComments(char[]);
 void getProgram(char[]);
 
-int main(int argc, char argv[]) {
+int main(int argc, char* argv[]) {
   char buffer[MAX];
 
   getProgram(buffer);
